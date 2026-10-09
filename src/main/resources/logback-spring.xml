@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Print standard logs to the Console -->
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Write our specific Transactions to a rolling file -->
+    <appender name="TransactionFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/ims-transactions.log</file> <!-- This creates a 'logs' folder in your project directory -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Creates a new log file every day automatically -->
+            <fileNamePattern>logs/ims-transactions.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- Keeps 30 days of logs -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Base Spring Boot logs go to the console -->
+    <root level="INFO">
+        <appender-ref ref="ConsoleAppender" />
+    </root>
+
+
+    <logger name="ims-transaction-logger" level="INFO" additivity="false">
+        <appender-ref ref="TransactionFile" /> <!-- Writes to the file -->
+        <appender-ref ref="ConsoleAppender" /> <!-- Also prints to console so I can see it -->
+    </logger>
+</configuration>
